@@ -51,6 +51,12 @@ class Router {
 
     }
 
+    /**
+     * Parse incoming request, match it with a route and extract the paremeters. 
+     * @param string $uri
+     * @return fun
+     */
+
     public function parseUri($uri) {
 
         foreach ($this->routes as $route) {
@@ -58,6 +64,11 @@ class Router {
             $pattern = '@^' . preg_replace('@{(\w+)*}@', '(\w+)*', $route['path']) . '$@';
 
             if (preg_match($pattern, $uri)) {
+
+                if (Request::method() != $route['request_method']) {
+                    throw new \Exception("method " . Request::method() . " not allowed");
+                }
+
                 // a little parameter processing.
                 $routeParts = explode('/', $route['path']);
 
@@ -71,17 +82,25 @@ class Router {
                     }
                 }
                 // lets process. 
-                return $this->direct($route, $variables);
+                return $this->direct($route['controller'], $route['method'], $variables);
                 
             }
-
         }
+        
+        // Maybe in future some RouteNotFoundException?
+        throw new \Exception("route not found.");
+
     }
 
 
-    public function direct($route, $parameters = []) {
-        var_dump($route);
-        var_dump($parameters);
+    public function direct($controller, $method, $parameters = []) {
+ 
+        $controller =  'App\\Controllers\\' . $controller;
+
+        $controller = new $controller;
+
+        call_user_func_array([$controller, $method], $parameters);
+
     }
 
 
