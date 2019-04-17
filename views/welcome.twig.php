@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Welcome</title>
-</head>
-<body>
-    <h1>Welcome To Cheap</h1>
-</body>
-</html>
+{% extends "layouts/master.twig.php" %}
+{% block content %}
+<main role="main" class="container" style="margin-top:70px;">
+
+  <div class="starter-template">
+    <h1>CHEAP PHP</h1>
+    <p class="lead">
+    Welcome to Cheap, A completely unnecessary PHP Framework. But yet powerful to bootstrap apps from Scratch!
+    </p>
+  </div>
+
+</main><!-- /.container -->
+{% endblock %}
