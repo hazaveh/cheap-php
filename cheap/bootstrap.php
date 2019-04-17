@@ -1,8 +1,9 @@
 <?php
 use Cheap\Router;
+use Cheap\Request; 
 
 $router = new Router;
 
 require_once __DIR__.'/../routes.php';
 
-var_dump($router->getRoutes());
+$router->parseUri(Request::uri());
