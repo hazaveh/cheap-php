@@ -14,11 +14,26 @@ class Router {
 
     public function add($route, $action, $request_method) {
 
-        $action = explode('@', $action);
+        if (is_callable($action)) {
+
+            $controller = null;
+
+            $method = $action;
+
+        } else {
+            
+            $action = explode('@', $action);
+            
+            $controller = $action[0];
+
+            $method = $action[1];
+
+        }
+
         $this->routes[] = [
             'path' => trim($route, '/'),
-            'controller' => $action[0],
-            'method' => $action['1'],
+            'controller' => $controller,
+            'method' => $method,
             'request_method' => $request_method
         ];
 
@@ -81,6 +96,12 @@ class Router {
                         $variables[trim($routeParts[$index], '{}')] = $urlParts[$index]; 
                     }
                 }
+                
+                // There is no controller, we execute the callback function provided to the route.
+                if (!$route['controller']) {
+                    return call_user_func_array($route['method'], $variables);
+                }
+
                 // lets process. 
                 return $this->direct($route['controller'], $route['method'], $variables);
                 
@@ -99,7 +120,17 @@ class Router {
 
         $controller = new $controller;
 
+        if (!method_exists($controller, $method)) {
+            throw new \Exception("method $method does not exist");
+        }
+
         call_user_func_array([$controller, $method], $parameters);
+
+    }
+
+    public function returnCallback($callback) {
+
+
 
     }
 
