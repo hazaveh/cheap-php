@@ -32,4 +32,18 @@ class RoutingTest extends TestCase
         $this->assertEquals($sample, json_decode($response->getBody(), true));
 
     }
+
+    public function testCallback() {
+        
+        $this->router->get('callback/{parameter}', function($parameter) {
+
+            echo $parameter;
+
+        });
+
+        $response = $this->httpClient->request('GET', 'callback/helloworld')->getBody()->getContents();
+
+        $this->assertStringContainsString('helloworld', $response);
+
+    }
 }

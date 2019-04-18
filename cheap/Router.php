@@ -92,9 +92,13 @@ class Router {
                 $variables = [];
 
                 foreach ($routeParts as $index => $value) {
+
                     if (strpos($value, '{') !== FALSE) {
+
                         $variables[trim($routeParts[$index], '{}')] = $urlParts[$index]; 
+                            
                     }
+
                 }
                 
                 // There is no controller, we execute the callback function provided to the route.
