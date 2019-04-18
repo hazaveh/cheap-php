@@ -74,7 +74,7 @@ class Router {
 
     public function parseUri($uri) {
 
-        foreach ($this->routes as $route) {
+        foreach (array_reverse($this->routes) as $route) {
 
             $pattern = '@^' . preg_replace('@{(\w+)*}@', '(\w+)*', $route['path']) . '$@';
 
@@ -96,7 +96,7 @@ class Router {
                     if (strpos($value, '{') !== FALSE) {
 
                         $variables[trim($routeParts[$index], '{}')] = $urlParts[$index]; 
-                            
+
                     }
 
                 }
